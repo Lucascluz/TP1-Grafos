@@ -55,10 +55,13 @@ class Graph
                 u = i;
                 break;
             }
+
         }
 
         // Printa tour a partir do impar V
+        Console.Write("{");
         printEulerUtil(u);
+        Console.Write("}");
         Console.WriteLine();
     }
 
@@ -73,7 +76,7 @@ class Graph
             // Se aresta u-v é valida, passa para a proxima
             if (isValidNextAresta(u, v))
             {
-                Console.Write(u + "-" + v + " ");
+                Console.Write("(" + u + "-" + v + "), ");
 
                 // Essa aresta é utlizada então é removida agora
                 removeAresta(u, v);
