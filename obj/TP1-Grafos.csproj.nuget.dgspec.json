@@ -1,25 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lucka\\Desktop\\Importantes\\Faculdade\\4ºPeriodo\\Grafos\\TP1-Grafos\\TP1-Grafos.csproj": {}
+    "D:\\AAAAULAS\\PUC\\4Quarto\\Grafos\\TRAB 1\\TP1-Grafos\\TP1-Grafos.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lucka\\Desktop\\Importantes\\Faculdade\\4ºPeriodo\\Grafos\\TP1-Grafos\\TP1-Grafos.csproj": {
+    "D:\\AAAAULAS\\PUC\\4Quarto\\Grafos\\TRAB 1\\TP1-Grafos\\TP1-Grafos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lucka\\Desktop\\Importantes\\Faculdade\\4ºPeriodo\\Grafos\\TP1-Grafos\\TP1-Grafos.csproj",
+        "projectUniqueName": "D:\\AAAAULAS\\PUC\\4Quarto\\Grafos\\TRAB 1\\TP1-Grafos\\TP1-Grafos.csproj",
         "projectName": "TP1-Grafos",
-        "projectPath": "C:\\Users\\lucka\\Desktop\\Importantes\\Faculdade\\4ºPeriodo\\Grafos\\TP1-Grafos\\TP1-Grafos.csproj",
-        "packagesPath": "C:\\Users\\lucka\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lucka\\Desktop\\Importantes\\Faculdade\\4ºPeriodo\\Grafos\\TP1-Grafos\\obj\\",
+        "projectPath": "D:\\AAAAULAS\\PUC\\4Quarto\\Grafos\\TRAB 1\\TP1-Grafos\\TP1-Grafos.csproj",
+        "packagesPath": "C:\\Users\\T-Gamer\\.nuget\\packages\\",
+        "outputPath": "D:\\AAAAULAS\\PUC\\4Quarto\\Grafos\\TRAB 1\\TP1-Grafos\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\lucka\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\T-Gamer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,8 +48,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -53,7 +57,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }
