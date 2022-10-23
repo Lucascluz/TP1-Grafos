@@ -5,9 +5,9 @@ static class Program
   // TODO: fix, arrumar método
   static void RunEuler()
   {
-    var g100Eureliano = Euler.Graph.PreecherGrafo(100, 0);
-    var g100SemiEureliano = Euler.Graph.PreecherGrafo(100, 1);
-    var g100NaoEureliano = Euler.Graph.PreecherGrafo(100, 2);
+    var g100Eureliano = Euler.Graph.PreecherGrafo(10_000_000, 0);
+    var g100SemiEureliano = Euler.Graph.PreecherGrafo(10_000_000, 1);
+    var g100NaoEureliano = Euler.Graph.PreecherGrafo(10_000_000, 2);
 
     g100Eureliano.printEulerTour();
 
@@ -74,8 +74,8 @@ static class Program
 
   public static void Main(String[] args)
   {
-    // RunEuler();
+    RunEuler();
 
-    RunTarjan();
+    // RunTarjan();
   }
 }

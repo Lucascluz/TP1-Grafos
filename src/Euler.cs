@@ -96,21 +96,33 @@ class Graph
   }
 
   // Printa o caminho Eureliano começando do Vertice U
-  void printEulerUtil(int u)
+  void printEulerUtil(int newU)
   {
-    // Percorre todos os vertices adjacentes a u
-    for (int i = 0; i < adj[u].Count; i++)
+    var us = new Queue<int>();
+
+    us.Enqueue(newU);
+
+    while (true)
     {
-      int v = adj[u][i];
+      if (us.Count == 0) break;
 
-      // Se aresta u-v é valida, passa para a proxima
-      if (isValidNextAresta(u, v))
+      var next = us.Dequeue();
+
+      // Percorre todos os vertices adjacentes a u
+      for (int i = 0; i < adj[next].Count; i++)
       {
-        Console.Write("(" + u + "-" + v + "), ");
+        int v = adj[next][i];
 
-        // Essa aresta é utlizada então é removida agora
-        removeAresta(u, v);
-        printEulerUtil(v);
+        // Se aresta u-v é valida, passa para a proxima
+        if (isValidNextAresta(next, v))
+        {
+          Console.Write("(" + next + "-" + v + "), ");
+
+          // Essa aresta é utlizada então é removida agora
+          removeAresta(next, v);
+
+          us.Enqueue(v);
+        }
       }
     }
   }
@@ -130,13 +142,13 @@ class Graph
     // Siga o passo a passo para saber de u-v é uma ponte
     // 2.a) conte os vertices alcançaveis a partir de u 
     bool[] isVisited = new bool[this.vertexCount];
-    int count1 = dfsCount(u, isVisited);
+    int count1 = BreadthFirstCount(u, isVisited);
 
     // 2.b) Remove Aresta (u, v) e depois de remover 
     // conte os vertices alcançaveis a partir de u
     removeAresta(u, v);
     isVisited = new bool[this.vertexCount];
-    int count2 = dfsCount(u, isVisited);
+    int count2 = BreadthFirstCount(u, isVisited);
 
     // 2.c) Coloca a aresta de volta no grafo
     addAresta(u, v);
@@ -209,20 +221,46 @@ class Graph
   }
 
   // Uma função baseada em DFS pra contar os vertices alcançaveis a partir de V
-  int dfsCount(int v, bool[] isVisited)
+  int BreadthFirstCount(int v, bool[] visitedNodeIndices)
   {
-    // Marca o nó visitado atualmente
-    isVisited[v] = true;
-    int count = 1;
+    var nodeCount = visitedNodeIndices.Length;
 
-    // Recorre por todos os vertices adjacentes a este vertice
-    foreach (int i in adj[v])
+    // Criar fila.
+    var queue = new LinkedList<int>();
+
+    // Marcar e colocar na fila o vértice atual.
+    visitedNodeIndices[v] = true;
+    queue.AddLast(v);
+
+    while (queue.Any())
     {
-      if (!isVisited[i])
+      // Retirar o vértice da fila.
+      v = queue.First();
+      queue.RemoveFirst();
+
+      // Recuperar os vértices adjacentes ao vértice atual.
+      foreach (var val in adj[v])
       {
-        count = count + dfsCount(i, isVisited);
+        // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
+        if (!visitedNodeIndices[v])
+        {
+          visitedNodeIndices[v] = true;
+          queue.AddLast(val);
+        }
       }
     }
+
+    // Contar a quantidade de vértices visitados.
+    var count = 0;
+    for (int i = 0; i < visitedNodeIndices.Length; i++)
+    {
+      if (visitedNodeIndices[i])
+      {
+        count++;
+      }
+    }
+
+    // Retornar a quantidade.
     return count;
   }
 }
