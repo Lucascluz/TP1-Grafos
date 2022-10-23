@@ -2,6 +2,7 @@ namespace TP1Grafos;
 
 static class Program
 {
+  // TODO: fix, arrumar método
   static void RunEuler()
   {
     var g100Eureliano = Euler.Graph.PreecherGrafo(100, 0);
@@ -51,20 +52,29 @@ static class Program
     var _0 = new Tarjan.Node(0);
     var _1 = new Tarjan.Node(1);
     var _2 = new Tarjan.Node(2);
+    var _3 = new Tarjan.Node(3);
+    var _4 = new Tarjan.Node(4);
 
-    var _3 = new Tarjan.Node(2);
+    g.Add(_0, _1);
+    g.Add(_0, _2);
+    g.Add(_0, _3);
+    g.Add(_3, _4);
 
-    g.Add(_0, new HashSet<Tarjan.Node> { _1, _2 });
-    g.Add(_3, new HashSet<Tarjan.Node> { });
+    // g.Tarjan();
 
-    g.Tarjan();
+    var hasBridge = g.NaiveHasBridge();
 
-    g.BreadthFirstSearch(_0);
+    Log(hasBridge.ToString());
+  }
+
+  static void Log(String value)
+  {
+    Console.WriteLine(value);
   }
 
   public static void Main(String[] args)
   {
-    RunEuler();
+    // RunEuler();
 
     RunTarjan();
   }

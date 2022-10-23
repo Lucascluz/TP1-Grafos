@@ -12,6 +12,11 @@ class Node
     Index = -1;
     LowLink = 0;
   }
+
+  public override string ToString()
+  {
+    return $"{{Tarjan.Graph n = {N}}}";
+  }
 }
 
 class Graph
@@ -19,66 +24,168 @@ class Graph
   public HashSet<Node> Nodes { get; } = new HashSet<Node>();
   public Dictionary<Node, HashSet<Node>> Adj { get; } = new Dictionary<Node, HashSet<Node>>();
 
-  public void Add(Node key, HashSet<Node> value)
+  // Adicionar apenas um vértice ao grafo.
+  public void Add(Node a)
   {
-    Nodes.Add(key);
-
-    foreach (var item in value)
+    if (!Adj.ContainsKey(a))
     {
-      Nodes.Add(item);
-      Adj.Add(item, new HashSet<Node>());
+      Nodes.Add(a);
+      Adj.Add(a, new HashSet<Node>());
     }
-
-    Adj.Add(key, value);
   }
 
-  public LinkedList<Node> BreadthFirstSearch(Node s)
+  // Adicionar uma aresta ao grafo.
+  public void Add(Node a, Node b)
   {
-    var size = Nodes.Count;
-
-    // Mark all the vertices as not
-    // visited(By default set as false)
-    var visited = new bool[size];
-    for (int i = 0; i < size; i++)
+    if (!Adj.ContainsKey(a))
     {
-      visited[i] = false;
+      Nodes.Add(a);
+      Adj.Add(a, new HashSet<Node>());
     }
 
-    // Create a queue for BFS
+    if (!Adj.ContainsKey(b))
+    {
+      Nodes.Add(b);
+      Adj.Add(b, new HashSet<Node>());
+    }
+
+    Adj[a].Add(b);
+    Adj[b].Add(a);
+  }
+
+  // Realiza uma busca em largura a partir de um vértice.
+  List<Node> BreadthFirstSearch(Node node)
+  {
+    var nodeCount = Nodes.Count;
+
+    // Marcar todos os vértices como não visitados.
+    var visitedNodeIndices = new bool[nodeCount];
+    for (int i = 0; i < nodeCount; i++)
+    {
+      visitedNodeIndices[i] = false;
+    }
+
+    // Criar fila.
     var queue = new LinkedList<Node>();
 
-    // Mark the current node as
-    // visited and enqueue it
-    visited[s.N] = true;
-    queue.AddLast(s);
+    // Marcar e colocar na fila o vértice atual.
+    visitedNodeIndices[node.N] = true;
+    queue.AddLast(node);
 
     while (queue.Any())
     {
-      // Dequeue a vertex from queue
-      // and print it
-      s = queue.First();
-      Console.Write(s + " ");
+      // Retirar o vértice da fila.
+      node = queue.First();
       queue.RemoveFirst();
 
-      // Get all adjacent vertices of the
-      // dequeued vertex s. If a adjacent
-      // has not been visited, then mark it
-      // visited and enqueue it
-      var list = Adj[s];
-
-      foreach (var val in list)
+      // Recuperar os vértices adjacentes ao vértice atual.
+      foreach (var val in Adj[node])
       {
-        if (!visited[val.N])
+        // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
+        if (!visitedNodeIndices[val.N])
         {
-          visited[val.N] = true;
+          visitedNodeIndices[val.N] = true;
           queue.AddLast(val);
         }
       }
     }
 
-    return queue;
+    // Criar uma lista com apenas os vértices visitados.
+    var visitedNodes = new List<Node>();
+    for (int i = 0; i < visitedNodeIndices.Length; i++)
+    {
+      if (visitedNodeIndices[i])
+      {
+        visitedNodes.Add(Nodes.First((node) => node.N == i));
+      }
+    }
+
+    // Retornar a lista de vértices visitados.
+    return visitedNodes;
   }
 
+  // Cria uma cópia do grafo.
+  public Graph Copy()
+  {
+    var graph = new Graph();
+
+    // Processar a lista de adjacência.
+    foreach (var entry in Adj)
+    {
+      var a = entry.Key;
+
+      foreach (var b in entry.Value)
+      {
+        graph.Add(a, b);
+      }
+    }
+
+    // Processr a lista de vértices.
+    foreach (var node in Nodes)
+    {
+      graph.Add(node);
+    }
+
+    return graph;
+  }
+
+  // Cria uma cópia do grafo sem um determinado vértice.
+  public Graph CopyWithout(Node node)
+  {
+    var graph = this.Copy();
+
+    graph.Remove(node);
+
+    return graph;
+  }
+
+  // Realiza uma busca em largura a partir de algum vértice para definir se o grafo é conexo.
+  public bool IsConnected()
+  {
+    return BreadthFirstSearch(Nodes.ElementAt(0)).Count == Nodes.Count;
+  }
+
+  // Método que utiliza brute force para entrontrar uma ponte, removendo cada vértice e chechando a conectividade do grafo em seguida.
+  public bool NaiveHasBridge()
+  {
+    // Caso não seja conexo, lançar exceção.
+    if (!IsConnected())
+    {
+      throw new Exception("Expected a connected graph.");
+    }
+
+    // Para cada vértice, criar uma cópia sem esse vértice do grafo atual.
+    foreach (var node in Nodes)
+    {
+      var newGraph = this.CopyWithout(node);
+
+      // Verificar se o grafo copiado é conexo.
+      var isConnected = newGraph.IsConnected();
+
+      if (!isConnected)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // Remover um determinado vértice do grafo.
+  public void Remove(Node node)
+  {
+    var neighbours = Adj[node];
+
+    foreach (var item in neighbours)
+    {
+      Adj[item].Remove(node);
+    }
+
+    Nodes.Remove(node);
+    Adj.Remove(node);
+  }
+
+  // TODO: fix, arrumar método
   public void Tarjan()
   {
     var index = 0; // number of nodes
