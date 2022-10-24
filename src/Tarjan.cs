@@ -21,6 +21,7 @@ class Node
 
 class Graph
 {
+  static readonly Random random = new Random();
   public HashSet<Node> Nodes { get; } = new HashSet<Node>();
   public Dictionary<Node, HashSet<Node>> Adj { get; } = new Dictionary<Node, HashSet<Node>>();
 
@@ -139,6 +140,15 @@ class Graph
     return graph;
   }
 
+  public Graph CopyWithoutAresta(Node a, Node b)
+  {
+    var graph = this.Copy();
+
+    graph.removeAresta(a, b);
+
+    return graph;
+  }
+
   // Realiza uma busca em largura a partir de algum vértice para definir se o grafo é conexo.
   public bool IsConnected()
   {
@@ -183,6 +193,12 @@ class Graph
 
     Nodes.Remove(node);
     Adj.Remove(node);
+  }
+
+  void removeAresta(Node a, Node b)
+  {
+    Adj[a].Remove(b);
+    Adj[b].Remove(a);
   }
 
   // TODO: fix, arrumar método
@@ -238,6 +254,217 @@ class Graph
       {
         strongConnect(v);
       }
+    }
+  }
+
+  bool VerificaArestaExiste(Node a, Node b)
+  {
+    if (Adj[a].Contains(b))
+    {
+      return true;
+    }
+    return false;
+  }
+
+  bool VerificaArestaPar(Node a, Node b)
+  {
+    if ((Adj[a].Count) % 2 == 0 && (Adj[b].Count) % 2 == 0)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  public bool printEulerTour()
+  {
+    // Acha o vertice de grau impar
+    var impares = new List<Node>();
+    Node u = Nodes.ElementAt(0);
+    foreach (var node in Nodes)
+    {
+      if (Adj[node].Count % 2 == 1)
+      {
+        impares.Add(node);
+        if (impares.Count > 2)
+        {
+          return false;
+        }
+      }
+    }
+
+    // for (int i = 0; i < Nodes.Count; i++)
+    // {
+    //   if (Adj[i].Count % 2 == 1)
+    //   {
+    //     impares.Add(i);
+    //     if (impares.Count > 2)
+    //     {
+    //       return false;
+    //     }
+    //   }
+    // }
+
+    // Printa tour a partir do impar V
+    Console.Write("{");
+    if (impares.Count != 0)
+    {
+      printEulerUtil(impares[0]);
+    }
+    else
+    {
+      printEulerUtil(u);
+    }
+    Console.Write("}");
+    Console.WriteLine();
+
+    return true;
+  }
+
+  void printEulerUtil(Node newU)
+  {
+    var us = new Queue<Node>();
+
+    us.Enqueue(newU);
+
+    while (true)
+    {
+      if (us.Count == 0) break;
+
+      var next = us.Dequeue();
+
+      // Percorre todos os vertices adjacentes a u
+      foreach (var node in Adj[next])
+      {
+        foreach (var v in Adj[node])
+        {
+          // Se aresta u-v é valida, passa para a proxima
+          if (NaiveHasBridge(next, v)) ///MECHER AQUI PARA JUNTAR Fleury
+          {
+            Console.Write("(" + next + "-" + v + "), ");
+
+            // Essa aresta é utlizada então é removida agora
+            removeAresta(next, v);
+
+            us.Enqueue(v);
+          }
+        }
+      }
+      // for (int i = 0; i < Adj[next].Count; i++)
+      // {
+      //   int v = Adj[next][i];
+
+      //   // Se aresta u-v é valida, passa para a proxima
+      //   if (isValidNextAresta(next, v)) ///MECHER AQUI PARA JUNTAR Fleury
+      //   {
+      //     Console.Write("(" + next + "-" + v + "), ");
+
+      //     // Essa aresta é utlizada então é removida agora
+      //     removeAresta(next, v);
+
+      //     us.Enqueue(v);
+      //   }
+      // }
+    }
+  }
+
+  public bool NaiveHasBridge(Node a, Node b)
+  {
+    // Caso não seja conexo, lançar exceção.
+    if (!IsConnected())
+    {
+      throw new Exception("Expected a connected graph.");
+    }
+
+    // Criar uma cópia sem esse vértice do grafo atual.
+    var newGraph = this.CopyWithoutAresta(a, b);
+
+    // Verificar se o grafo copiado é conexo.
+    var isConnected = newGraph.IsConnected();
+
+    if (!isConnected)
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+  static int RandomNumber(int min, int max)
+  {
+    return random.Next(min, max);
+  }
+  public static Graph IniciaVertices(int totalvertice)
+  {
+    Graph grafo = new Graph();
+    for (int i = 0; i < totalvertice; i++)
+    {
+      var a = new Node(i);
+    }
+
+    return grafo;
+  }
+
+  public static Graph Eureliano(int totalvertice)
+  {
+    Graph grafoEureliano = IniciaVertices(totalvertice);
+    totalvertice--;
+    int vertice1 = 0;
+    var a = grafoEureliano.Nodes.ElementAt(0);
+    var b = grafoEureliano.Nodes.ElementAt(totalvertice);
+
+    grafoEureliano.Add(a, b);
+    while (vertice1 < totalvertice)
+    {
+      a = grafoEureliano.Nodes.ElementAt(vertice1);
+      b = grafoEureliano.Nodes.ElementAt(vertice1 + 1);
+      grafoEureliano.Add(a, b);
+      vertice1++;
+    }
+
+    return grafoEureliano;
+  }
+
+  public static Graph SemiEureliano(int totalvertice)
+  {
+    Graph grafoSemiEureliano = Eureliano(totalvertice);
+
+    grafoSemiEureliano.Add(grafoSemiEureliano.Nodes.ElementAt(0), grafoSemiEureliano.Nodes.ElementAt(totalvertice / 2 + 1));
+
+    return grafoSemiEureliano;
+  }
+
+  public static Graph NaoEureliano(int totalvertice)
+  {
+    Graph grafoNaoEureliano = Eureliano(totalvertice);
+    for (int i = 0; i < 2;)
+    {
+      var vertice1 = RandomNumber(0, totalvertice);
+      var vertice2 = RandomNumber(0, totalvertice);
+      if (vertice1 != vertice2 && !grafoNaoEureliano.VerificaArestaExiste(grafoNaoEureliano.Nodes.ElementAt(vertice1), grafoNaoEureliano.Nodes.ElementAt(vertice2)) && grafoNaoEureliano.VerificaArestaPar(grafoNaoEureliano.Nodes.ElementAt(vertice1), grafoNaoEureliano.Nodes.ElementAt(vertice2)))
+      {
+        grafoNaoEureliano.Add(grafoNaoEureliano.Nodes.ElementAt(vertice1), grafoNaoEureliano.Nodes.ElementAt(vertice2));
+        i++;
+      }
+    }
+
+    return grafoNaoEureliano;
+  }
+
+  // Eureliano = 0, SemiEureliano = 1, NãoEureliano = 2
+  public static Graph PreecherGrafo(int tamanho, int tipoGrafo)
+  {
+    switch (tipoGrafo)
+    {
+      case 0:
+        return Eureliano(tamanho);
+      case 1:
+        return SemiEureliano(tamanho);
+      case 2:
+        return NaoEureliano(tamanho);
+      //se tamanho = impar não pode ser eureliano nem semi
+      default:
+        Graph g1 = new Graph();
+        return g1;
     }
   }
 }

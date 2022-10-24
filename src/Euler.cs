@@ -114,7 +114,7 @@ class Graph
         int v = adj[next][i];
 
         // Se aresta u-v é valida, passa para a proxima
-        if (isValidNextAresta(next, v))
+        if (isValidNextAresta(next, v)) ///MECHER AQUI PARA JUNTAR Fleury
         {
           Console.Write("(" + next + "-" + v + "), ");
 
