@@ -1,19 +1,51 @@
 namespace TP1Grafos;
+using System.Diagnostics;
 
 static class Program
 {
   // TODO: fix, arrumar método
   static void RunEuler()
   {
-    var g100Eureliano = Euler.Graph.PreecherGrafo(10_000_000, 0);
-    var g100SemiEureliano = Euler.Graph.PreecherGrafo(10_000_000, 1);
-    var g100NaoEureliano = Euler.Graph.PreecherGrafo(10_000_000, 2);
+    var stopwatch = new Stopwatch();
 
-    g100Eureliano.printEulerTour();
+    Console.WriteLine("Eureliano");
+    for (int i = 100; i < 100_001; i *= 10)
+    {
+      var g100Eureliano = Tarjan.Graph.PreecherGrafo(i, 0);
 
-    g100SemiEureliano.printEulerTour();
+      stopwatch.Restart();
+      var grafo = g100Eureliano.printEulerTourNaive(false);
+      stopwatch.Stop();
 
-    g100NaoEureliano.printEulerTour();
+      Console.WriteLine("È eureliano/semi = " + grafo + " Tamanho: " + i + " Tempo em ms: " + stopwatch.ElapsedMilliseconds);
+    }
+
+    Console.WriteLine("Semi-Eureliano");
+    for (int i = 100; i < 100_001; i *= 10)
+    {
+      var g100SemiEureliano = Tarjan.Graph.PreecherGrafo(i, 1);
+
+      stopwatch.Restart();
+      var grafo = g100SemiEureliano.printEulerTourNaive(false);
+      stopwatch.Stop();
+
+      Console.WriteLine("È eureliano/semi = " + grafo + " Tamanho: " + i + " Tempo em ms: " + stopwatch.ElapsedMilliseconds);
+    }
+    Console.WriteLine("Não-Eureliano");
+    for (int i = 100; i < 100_001; i *= 10)
+    {
+      var g100NaoEureliano = Tarjan.Graph.PreecherGrafo(i, 2);
+
+      stopwatch.Restart();
+      var grafo = g100NaoEureliano.printEulerTourNaive(false);
+      stopwatch.Stop();
+
+      Console.WriteLine("È eureliano/semi = " + grafo + " Tamanho: " + i + " Tempo em ms: " + stopwatch.ElapsedMilliseconds);
+    }
+
+    // g100SemiEureliano.printEulerTourNaive();
+
+    // g100NaoEureliano.printEulerTourNaive();
 
     // Random rand = new Random();
 
@@ -54,13 +86,16 @@ static class Program
     var _2 = new Tarjan.Node(2);
     var _3 = new Tarjan.Node(3);
     var _4 = new Tarjan.Node(4);
+    var _5 = new Tarjan.Node(5);
 
     g.Add(_0, _1);
-    g.Add(_0, _2);
-    g.Add(_0, _3);
-    g.Add(_3, _4);
+    g.Add(_1, _2);
+    g.Add(_2, _3);
+    g.Add(_3, _0);
+    g.Add(_0, _4);
+    g.Add(_2, _5);
 
-    // g.Tarjan();
+    g.Tarjan();
 
     var hasBridge = g.NaiveHasBridge();
 
@@ -74,8 +109,8 @@ static class Program
 
   public static void Main(String[] args)
   {
-    RunEuler();
+    // RunEuler();
 
-    // RunTarjan();
+    RunTarjan();
   }
 }

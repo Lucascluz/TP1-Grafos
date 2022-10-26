@@ -256,6 +256,19 @@ class Graph
       }
     }
   }
+  public void Tarjan2()
+  {
+    var index = 0; // number of nodes
+    var s = new Stack<Node>();
+    /* Encontre uma árvore de extensão mínima de {\displaystyle G}G
+    Crie uma árvore enraizada {\displaystyle T}T a partir da árvore de extensão mínima
+    Atravesse a árvore {\displaystyle T}T em pós-ordem e numere os nodos. Nodos pai na árvore agora tem números mais altos do que os nodos filho.
+    Para cada nodo de 1 a {\displaystyle v_{1}}v_{1} (o nodo raiz da árvore) faça:
+    Calcule o número de descendentes {\displaystyle ND(v)}{\displaystyle ND(v)} para este nodo.
+    Calcule {\displaystyle L(v)}{\displaystyle L(v)} e {\displaystyle H(v)}{\displaystyle H(v)}
+    para cada {\displaystyle w}w tal que {\displaystyle v\to w}{\displaystyle v\to w}: se {\displaystyle H(w)\leq w}{\displaystyle H(w)\leq w} e {\displaystyle L(w)>w-ND(w)}{\displaystyle L(w)>w-ND(w)} então {\displaystyle (v,w)}{\displaystyle (v,w)} é uma ponte. */
+
+  }
 
   bool VerificaArestaExiste(Node a, Node b)
   {
@@ -275,8 +288,9 @@ class Graph
     return false;
   }
 
-  public bool printEulerTour()
+  public bool printEulerTourNaive(bool naiveTarjan)
   {
+
     // Acha o vertice de grau impar
     var impares = new List<Node>();
     Node u = Nodes.ElementAt(0);
@@ -305,22 +319,38 @@ class Graph
     // }
 
     // Printa tour a partir do impar V
-    Console.Write("{");
-    if (impares.Count != 0)
+    // Console.Write("{");
+
+    //Naive = false, tarjan = true
+    if (!naiveTarjan)
     {
-      printEulerUtil(impares[0]);
+      if (impares.Count != 0)
+      {
+        printEulerUtilNaive(impares[0]);
+      }
+      else
+      {
+        printEulerUtilNaive(u);
+      }
     }
     else
     {
-      printEulerUtil(u);
+      if (impares.Count != 0)
+      {
+        printEulerUtilTarjan(impares[0]);
+      }
+      else
+      {
+        printEulerUtilTarjan(u);
+      }
     }
-    Console.Write("}");
-    Console.WriteLine();
+    // Console.Write("}");
+    // Console.WriteLine();
 
     return true;
   }
 
-  void printEulerUtil(Node newU)
+  void printEulerUtilNaive(Node newU)
   {
     var us = new Queue<Node>();
 
@@ -340,7 +370,54 @@ class Graph
           // Se aresta u-v é valida, passa para a proxima
           if (NaiveHasBridge(next, v)) ///MECHER AQUI PARA JUNTAR Fleury
           {
-            Console.Write("(" + next + "-" + v + "), ");
+            // Console.Write("(" + next + "-" + v + "), ");
+
+            // Essa aresta é utlizada então é removida agora
+            removeAresta(next, v);
+
+            us.Enqueue(v);
+          }
+        }
+      }
+      // for (int i = 0; i < Adj[next].Count; i++)
+      // {
+      //   int v = Adj[next][i];
+
+      //   // Se aresta u-v é valida, passa para a proxima
+      //   if (isValidNextAresta(next, v)) ///MECHER AQUI PARA JUNTAR Fleury
+      //   {
+      //     Console.Write("(" + next + "-" + v + "), ");
+
+      //     // Essa aresta é utlizada então é removida agora
+      //     removeAresta(next, v);
+
+      //     us.Enqueue(v);
+      //   }
+      // }
+    }
+  }
+
+  void printEulerUtilTarjan(Node newU)
+  {
+    var us = new Queue<Node>();
+
+    us.Enqueue(newU);
+
+    while (true)
+    {
+      if (us.Count == 0) break;
+
+      var next = us.Dequeue();
+
+      // Percorre todos os vertices adjacentes a u
+      foreach (var node in Adj[next])
+      {
+        foreach (var v in Adj[node])
+        {
+          // Se aresta u-v é valida, passa para a proxima
+          if (NaiveHasBridge(next, v)) ///MECHER AQUI PARA JUNTAR Fleury
+          {
+            // Console.Write("(" + next + "-" + v + "), ");
 
             // Essa aresta é utlizada então é removida agora
             removeAresta(next, v);
@@ -398,7 +475,7 @@ class Graph
     Graph grafo = new Graph();
     for (int i = 0; i < totalvertice; i++)
     {
-      var a = new Node(i);
+      grafo.Add(new Node(i));
     }
 
     return grafo;
