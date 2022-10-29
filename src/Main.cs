@@ -8,30 +8,30 @@ static class Program
   {
     var stopwatch = new Stopwatch();
 
-    // Console.WriteLine("Eureliano");
-    // for (int i = 10; i < 100_001; i *= 10)
-    // {
-    //   var gEurelianoNaive = Tarjan.Graph.PreecherGrafo(i, 0);
-    //   var gEurelianoTarjan = Tarjan.Graph.PreecherGrafo(i, 0);
+    Console.WriteLine("Eureliano");
+    for (int i = 10; i < 100_001; i *= 10)
+    {
+      var gEurelianoNaive = Tarjan.Graph.PreecherGrafo(i, 0);
+      var gEurelianoTarjan = Tarjan.Graph.PreecherGrafo(i, 0);
 
-    //   stopwatch.Restart();
-    //   var grafo = gEurelianoTarjan.printEulerTourNaive(true);
-    //   stopwatch.Stop();
+      stopwatch.Restart();
+      var grafo = gEurelianoTarjan.printEulerTourNaive(true);
+      stopwatch.Stop();
 
-    //   var adj = gEurelianoTarjan.VerificaAdj();
+      var adj = gEurelianoTarjan.VerificaAdj();
 
-    //   Console.WriteLine("Tarjan: é eureliano/semi = " + grafo + " Tamanho: " + i + " Tempo em ms: " + stopwatch.ElapsedMilliseconds);
+      Console.WriteLine("Tarjan: é eureliano/semi = " + grafo + " Tamanho: " + i + " Tempo em ms: " + stopwatch.ElapsedMilliseconds);
 
-    //   stopwatch.Restart();
-    //   grafo = gEurelianoNaive.printEulerTourNaive(false);
-    //   stopwatch.Stop();
+      stopwatch.Restart();
+      grafo = gEurelianoNaive.printEulerTourNaive(false);
+      stopwatch.Stop();
 
-    //   adj = gEurelianoNaive.VerificaAdj();
+      adj = gEurelianoNaive.VerificaAdj();
 
-    //   Console.WriteLine("Naive: é eureliano/semi = " + grafo + " Tamanho: " + i + " Tempo em ms: " + stopwatch.ElapsedMilliseconds);
+      Console.WriteLine("Naive: é eureliano/semi = " + grafo + " Tamanho: " + i + " Tempo em ms: " + stopwatch.ElapsedMilliseconds);
 
-    //   Console.WriteLine();
-    // }
+      Console.WriteLine();
+    }
 
     Console.WriteLine("Semi-Eureliano");
     for (int i = 100; i < 100_001; i *= 10)
@@ -138,6 +138,7 @@ static class Program
     // g.Add(_1, _3);
     // g.Add(_2, _3);
     // g.Add(_4, _5);
+
     // var grafinho = Tarjan.Graph.PreecherGrafo(10, 0);
     // var grafo = grafinho.printEulerTourNaive(true);
 
@@ -155,18 +156,18 @@ static class Program
 
     // g.Add(_3, _4);
 
-    // g.Add(_0, _1);
-    // g.Add(_1, _2);
-    // g.Add(_1, _3);
-    // g.Add(_2, _3);
-    // g.Add(_0, _4);
-    // g.Add(_0, _5);
-    // g.Add(_4, _5);
-
     g.Add(_0, _1);
-    g.Add(_0, _2);
-    g.Add(_0, _3);
-    g.Add(_3, _2);
+    g.Add(_1, _2);
+    g.Add(_1, _3);
+    g.Add(_2, _3);
+    g.Add(_0, _4);
+    g.Add(_0, _5);
+    g.Add(_4, _5);
+
+    // g.Add(_0, _1);
+    // g.Add(_0, _2);
+    // g.Add(_0, _3);
+    // g.Add(_3, _2);
 
     // g.Add(_0, _4);
     // g.Add(_0, _5);
@@ -176,7 +177,7 @@ static class Program
     // var alo = g.GrauNos(_0, _0.N, pontes);
     // var b = g.TarjanPontes();
     // var b = g.ArvoreEnraizada(_0);
-    var grafooo = g.printEulerTourNaive(true);
+    var grafooo = g.printEulerTourNaive(false);
 
     // var hasBridge = g.NaiveHasBridge();
 
@@ -190,8 +191,8 @@ static class Program
 
   public static void Main(String[] args)
   {
-    RunEuler();
+    // RunEuler();
 
-    // RunTarjan();
+    RunTarjan();
   }
 }

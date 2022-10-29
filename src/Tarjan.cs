@@ -5,7 +5,6 @@ class Node
   public int LowLink { get; set; }
   public int Index { get; set; }
   public int N { get; }
-
   public bool Visitado { get; set; }
 
   public Node(int n)
@@ -64,10 +63,16 @@ class Graph
 
     // Marcar todos os vértices como não visitados.
     var visitedNodeIndices = new bool[nodeCount];
-    for (int i = 0; i < nodeCount; i++)
+
+    foreach (var item in Nodes)
     {
-      visitedNodeIndices[i] = false;
+      item.Visitado = false;
     }
+
+    // for (int i = 0; i < nodeCount; i++)
+    // {
+    //   visitedNodeIndices[i] = false;
+    // }
 
     // Criar fila.
     var queue = new LinkedList<Node>();
@@ -838,8 +843,6 @@ class Graph
       {
         if (Adj[next].Count > 1) ///MECHER AQUI PARA JUNTAR Fleury
         {
-          // foreach (var v in Adj[node])
-          // {
           // Se aresta u-v é valida, passa para a proxima
           if (!TarjanPontes(next, node/*,  quantVertices */))
           {
