@@ -46,11 +46,11 @@ static class Program
 
     if (type == GraphType.nonEuler)
     {
-      typeText = "nonieuler";
+      typeText = "non-euler";
     }
     else if (type == GraphType.semiEuler)
     {
-      typeText = "semieuler";
+      typeText = "semi-euler";
     }
 
     return Graph.Import(File.ReadAllText($"assets/{size}-{typeText}"));
