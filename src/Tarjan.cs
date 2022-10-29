@@ -161,12 +161,12 @@ class Graph
     switch (type)
     {
       case GraphType.euler:
-        return Eureliano(size);
+        return Euleriano(size);
       case GraphType.semiEuler:
-        return SemiEureliano(size);
+        return SemiEuleriano(size);
       case GraphType.nonEuler:
-        return NaoEureliano(size);
-      // Se o tamanho for ímpar não pode ser eureliano nem semi.
+        return NaoEuleriano(size);
+      // Se o tamanho for ímpar não pode ser euleriano nem semi.
       default:
         return new Graph();
     }
@@ -499,56 +499,56 @@ class Graph
     Adj.Remove(node);
   }
 
-  public static Graph Eureliano(int vertexCount)
+  public static Graph Euleriano(int vertexCount)
   {
-    var grafoEureliano = InitVertices(vertexCount);
+    var g = InitVertices(vertexCount);
 
     vertexCount--;
 
     int vertice1 = 0;
-    var a = grafoEureliano.Nodes.ElementAt(0);
-    var b = grafoEureliano.Nodes.ElementAt(vertexCount);
+    var a = g.Nodes.ElementAt(0);
+    var b = g.Nodes.ElementAt(vertexCount);
 
-    grafoEureliano.Add(a, b);
+    g.Add(a, b);
 
     while (vertice1 < vertexCount)
     {
-      a = grafoEureliano.Nodes.ElementAt(vertice1);
-      b = grafoEureliano.Nodes.ElementAt(vertice1 + 1);
+      a = g.Nodes.ElementAt(vertice1);
+      b = g.Nodes.ElementAt(vertice1 + 1);
 
-      grafoEureliano.Add(a, b);
+      g.Add(a, b);
 
       vertice1++;
     }
 
-    return grafoEureliano;
+    return g;
   }
 
-  public static Graph SemiEureliano(int vertexCount)
+  public static Graph SemiEuleriano(int vertexCount)
   {
-    var grafoSemiEureliano = Eureliano(vertexCount);
+    var g = Euleriano(vertexCount);
 
-    grafoSemiEureliano.Add(grafoSemiEureliano.Nodes.ElementAt(0), grafoSemiEureliano.Nodes.ElementAt(vertexCount / 2 + 1));
+    g.Add(g.Nodes.ElementAt(0), g.Nodes.ElementAt(vertexCount / 2 + 1));
 
-    return grafoSemiEureliano;
+    return g;
   }
 
-  public static Graph NaoEureliano(int vertexCount)
+  public static Graph NaoEuleriano(int vertexCount)
   {
-    var grafoNaoEureliano = Eureliano(vertexCount);
+    var g = Euleriano(vertexCount);
 
     for (int i = 0; i < 2;)
     {
       var vertice1 = RandomNumber(0, vertexCount);
       var vertice2 = RandomNumber(0, vertexCount);
 
-      if (vertice1 != vertice2 && !grafoNaoEureliano.VerificaArestaExiste(grafoNaoEureliano.Nodes.ElementAt(vertice1), grafoNaoEureliano.Nodes.ElementAt(vertice2)) && grafoNaoEureliano.VerificaArestaPar(grafoNaoEureliano.Nodes.ElementAt(vertice1), grafoNaoEureliano.Nodes.ElementAt(vertice2)))
+      if (vertice1 != vertice2 && !g.VerificaArestaExiste(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2)) && g.VerificaArestaPar(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2)))
       {
-        grafoNaoEureliano.Add(grafoNaoEureliano.Nodes.ElementAt(vertice1), grafoNaoEureliano.Nodes.ElementAt(vertice2));
+        g.Add(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2));
         i++;
       }
     }
 
-    return grafoNaoEureliano;
+    return g;
   }
 }

@@ -58,7 +58,7 @@ static class Program
 
   static void Print(String type, bool grafo, int i, Stopwatch stopwatch)
   {
-    var euler = grafo ? "eureliano/semi" : "não eureliano/semi";
+    var euler = grafo ? "euleriano/semi" : "não euleriano/semi";
 
     Console.WriteLine($"{type}:\t{euler}\tTamanho:\t{i}\tTempo:\t{stopwatch.ElapsedMilliseconds}ms");
   }
@@ -67,7 +67,7 @@ static class Program
   {
     var stopwatch = new Stopwatch();
 
-    Console.WriteLine($"\nEureliano");
+    Console.WriteLine($"\nEuleriano");
     for (int i = 10; i < 100_001; i *= 10)
     {
       RunGraph(stopwatch, i, GraphMethod.naive, GraphType.euler, generation);
@@ -76,7 +76,7 @@ static class Program
       Console.WriteLine();
     }
 
-    Console.WriteLine($"\nSemi-Eureliano");
+    Console.WriteLine($"\nSemi-Euleriano");
     for (int i = 100; i < 100_001; i *= 10)
     {
       RunGraph(stopwatch, i, GraphMethod.naive, GraphType.semiEuler, generation);
@@ -85,7 +85,7 @@ static class Program
       Console.WriteLine();
     }
 
-    Console.WriteLine($"\nNão-Eureliano");
+    Console.WriteLine($"\nNão-Euleriano");
     for (int i = 100; i < 100_001; i *= 10)
     {
       RunGraph(stopwatch, i, GraphMethod.naive, GraphType.nonEuler, generation);
