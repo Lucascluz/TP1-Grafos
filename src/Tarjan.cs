@@ -62,7 +62,7 @@ class Graph
     var nodeCount = Nodes.Count;
 
     // Marcar todos os vértices como não visitados.
-    var visitedNodeIndices = new bool[nodeCount];
+    var visitedNodeIndices = new Dictionary<int, bool>();
 
     foreach (var item in Nodes)
     {
@@ -91,7 +91,11 @@ class Graph
       foreach (var val in Adj[node])
       {
         // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
-        if (!visitedNodeIndices[val.N])
+
+        var exists = visitedNodeIndices.ContainsKey(val.N);
+        var notVisited = !exists || !visitedNodeIndices[val.N];
+
+        if (notVisited)
         {
           visitedNodeIndices[val.N] = true;
           queue.AddLast(val);
@@ -101,11 +105,12 @@ class Graph
 
     // Criar uma lista com apenas os vértices visitados.
     var visitedNodes = new List<Node>();
-    for (int i = 0; i < visitedNodeIndices.Length; i++)
+
+    foreach (var item in visitedNodeIndices)
     {
-      if (visitedNodeIndices[i])
+      if (item.Value)
       {
-        visitedNodes.Add(Nodes.First((node) => node.N == i));
+        visitedNodes.Add(Nodes.First((node) => node.N == item.Key));
       }
     }
 
@@ -909,12 +914,7 @@ class Graph
     // Verificar se o grafo copiado é conexo.
     var isConnected = newGraph.IsConnected();
 
-    if (!isConnected)
-    {
-      return true;
-    }
-
-    return false;
+    return !isConnected;
   }
 
   static int RandomNumber(int min, int max)
