@@ -17,4 +17,19 @@ class Node
   {
     return $"{{Tarjan.Graph n = {N}}}";
   }
+
+  public override int GetHashCode()
+  {
+    return N;
+  }
+
+  public override bool Equals(object? obj)
+  {
+    if (obj is Node)
+    {
+      return ((Node)obj).N == N;
+    }
+
+    return false;
+  }
 }
