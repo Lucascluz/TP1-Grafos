@@ -1,9 +1,9 @@
-namespace TP1Grafos;
 using System.Diagnostics;
+
+namespace TP1Grafos;
 
 static class Program
 {
-  // TODO: fix, arrumar método
   static void RunEuler()
   {
     var stopwatch = new Stopwatch();
@@ -11,8 +11,8 @@ static class Program
     Console.WriteLine("Eureliano");
     for (int i = 10; i < 100_001; i *= 10)
     {
-      var gEurelianoNaive = Tarjan.Graph.PreecherGrafo(i, 0);
-      var gEurelianoTarjan = Tarjan.Graph.PreecherGrafo(i, 0);
+      var gEurelianoNaive = Graph.PreecherGrafo(i, 0);
+      var gEurelianoTarjan = Graph.PreecherGrafo(i, 0);
 
       stopwatch.Restart();
       var grafo = gEurelianoTarjan.printEulerTourNaive(true);
@@ -36,8 +36,8 @@ static class Program
     Console.WriteLine("Semi-Eureliano");
     for (int i = 100; i < 100_001; i *= 10)
     {
-      var gSemiEurelianoNaive = Tarjan.Graph.PreecherGrafo(i, 1);
-      var gSemiEurelianoTarjan = Tarjan.Graph.PreecherGrafo(i, 1);
+      var gSemiEurelianoNaive = Graph.PreecherGrafo(i, 1);
+      var gSemiEurelianoTarjan = Graph.PreecherGrafo(i, 1);
 
       stopwatch.Restart();
       var grafo = gSemiEurelianoTarjan.printEulerTourNaive(true);
@@ -60,8 +60,8 @@ static class Program
     Console.WriteLine("Não-Eureliano");
     for (int i = 100; i < 100_001; i *= 10)
     {
-      var gNaoEurelianoNaive = Tarjan.Graph.PreecherGrafo(i, 2);
-      var gNaoEurelianoTarjan = Tarjan.Graph.PreecherGrafo(i, 2);
+      var gNaoEurelianoNaive = Graph.PreecherGrafo(i, 2);
+      var gNaoEurelianoTarjan = Graph.PreecherGrafo(i, 2);
 
       stopwatch.Restart();
       var grafo = gNaoEurelianoNaive.printEulerTourNaive(false);
@@ -77,51 +77,18 @@ static class Program
 
       Console.WriteLine();
     }
-
-    // g100SemiEureliano.printEulerTourNaive();
-
-    // g100NaoEureliano.printEulerTourNaive();
-
-    // Random rand = new Random();
-
-    // Console.WriteLine("\tGerando grafo aleatorio de 100 Vértices");
-    // Graph g100 = new Graph(100);
-    // for (int i = 0; i < g100.vertices; i++)
-    // {
-    //   g100.addAresta(rand.Next(1, 100), rand.Next(1, 100));
-    // }
-    // Console.WriteLine("\t Imprimindo Caminho Euleriano do Grafo");
-    // g100.printEulerTour();
-
-    // Console.WriteLine("\tGerando grafo aleatorio de 1000 Vértices");
-    // Graph g1k = new Graph(1000);
-    // for (int i = 0; i < g1k.vertices; i++)
-    // {
-    //   g1k.addAresta(rand.Next(1, 1000), rand.Next(1, 1000));
-    // }
-    // Console.WriteLine("\t Imprimindo Caminho Euleriano do Grafo");
-    // g1k.printEulerTour();
-
-    // Console.WriteLine("\tGerando grafo aleatorio de 10000 Vértices");
-    // Graph g10k = new Graph(10000);
-    // for (int i = 0; i < g10k.vertices; i++)
-    // {
-    //   g10k.addAresta(rand.Next(1, 10000), rand.Next(1, 10000));
-    // }
-    // Console.WriteLine("\t Imprimindo Caminho Euleriano do Grafo");
-    // g10k.printEulerTour();
   }
 
-  static void RunTarjan()
+  static void Test()
   {
-    var g = new Tarjan.Graph();
+    var g = new Graph();
 
-    var _0 = new Tarjan.Node(0);
-    var _1 = new Tarjan.Node(1);
-    var _2 = new Tarjan.Node(2);
-    var _3 = new Tarjan.Node(3);
-    var _4 = new Tarjan.Node(4);
-    var _5 = new Tarjan.Node(5);
+    var _0 = new Node(0);
+    var _1 = new Node(1);
+    var _2 = new Node(2);
+    var _3 = new Node(3);
+    var _4 = new Node(4);
+    var _5 = new Node(5);
 
     // g.Add(_0, _1);
     // g.Add(_1, _2);
@@ -173,26 +140,13 @@ static class Program
     // g.Add(_0, _5);
     // g.Add(_4, _5);
 
-    var pontes = new List<Tarjan.Edge>();
-    // var alo = g.GrauNos(_0, _0.N, pontes);
-    // var b = g.TarjanPontes();
-    // var b = g.ArvoreEnraizada(_0);
-    var grafooo = g.printEulerTourNaive(false);
-
-    // var hasBridge = g.NaiveHasBridge();
-
-    // Log(hasBridge.ToString());
+    var grafo = g.printEulerTourNaive(false);
   }
-
-  // static void Log(String value)
-  // {
-  //   Console.WriteLine(value);
-  // }
 
   public static void Main(String[] args)
   {
-    // RunEuler();
+    RunEuler();
 
-    RunTarjan();
+    // Test();
   }
 }
