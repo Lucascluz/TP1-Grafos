@@ -1,3 +1,4 @@
+// Classe que representa um vértice do grafo.
 class Node
 {
   public int LowLink { get; set; }

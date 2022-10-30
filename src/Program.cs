@@ -21,6 +21,7 @@ public enum GraphType
 
 static class Program
 {
+  // Método utilizado para exportar os grafos para um arquivo.
   static void Export()
   {
     Console.WriteLine("Exporting graphs...");
@@ -40,6 +41,7 @@ static class Program
     Console.WriteLine("Finished exporting graphs...");
   }
 
+  // Método utilizado para importar um grafo a partir de um arquivo.
   static Graph Import(int size, GraphType type)
   {
     var typeText = "euler";

@@ -1,3 +1,4 @@
+// Classe que representa uma aresta do grafo.
 class Edge
 {
   public Node a = default!;
