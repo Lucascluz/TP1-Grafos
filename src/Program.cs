@@ -100,7 +100,7 @@ static class Program
     var g = generation == GraphGeneration.generate ? Graph.FillGraph(size, type) : Import(size, type);
 
     stopwatch.Restart();
-    var isEuler = g.PrintEulerTour(method);
+    var isEuler = g.PrintEulerTourFleury(method);
     stopwatch.Stop();
 
     var label = method == GraphMethod.naive ? "Naïve" : "Tarjan";
@@ -124,7 +124,6 @@ static class Program
     // g.Add(_0, _1);
     // g.Add(_1, _2);
     // g.Add(_2, _0);
-
     // g.Add(_3, _4);
     // g.Add(_4, _5);
     // g.Add(_5, _3);
@@ -141,14 +140,11 @@ static class Program
     // g.Add(_0, _2);
     // g.Add(_0, _3);
     // g.Add(_0, _4);
-
     // g.Add(_1, _2);
     // g.Add(_1, _3);
     // g.Add(_1, _4);
-
     // g.Add(_2, _3);
     // g.Add(_2, _4);
-
     // g.Add(_3, _4);
 
     g.Add(_0, _1);

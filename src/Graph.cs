@@ -115,7 +115,7 @@ class Graph
     return graph;
   }
 
-  //Copia um gravo sem uma determianda aresta
+  // Copia um gravo sem uma determianda aresta
   public Graph CopyWithoutEdge(Node a, Node b)
   {
     var graph = this.Copy();
@@ -124,7 +124,7 @@ class Graph
 
     return graph;
   }
-  //Exporta o grafo para um aquivo
+  // Exporta o grafo para um aquivo
   public String Export()
   {
     var export = "";
@@ -140,7 +140,7 @@ class Graph
     return export;
   }
 
-  //Importar os grafos de um arquivo
+  // Importar os grafos de um arquivo
   public static Graph Import(String input)
   {
     var g = new Graph();
@@ -158,7 +158,7 @@ class Graph
     return g;
   }
 
-  //Gerar grafos para teste
+  // Gerar grafos para teste
   public static Graph FillGraph(int size, GraphType type)
   {
     switch (type)
@@ -174,7 +174,7 @@ class Graph
     }
   }
 
-  //Inicializa os vertices de um grafo
+  // Inicializa os vertices de um grafo
   public static Graph InitVertices(int vertexCount)
   {
     var grafo = new Graph();
@@ -193,7 +193,7 @@ class Graph
     return BreadthFirstSearch(Nodes.ElementAt(0)).Count == Nodes.Count;
   }
 
-  //Altera o Index do no, ou seja os rutula com uma ordem e cria uma pilha de descoberta dos vertices
+  // Altera o Index do no, ou seja os rutula com uma ordem e cria uma pilha de descoberta dos vertices
   public Tuple<Graph, Stack<Node>> RootedTree(Node pai, Node node)
   {
     var grafo = new Graph();
@@ -222,7 +222,7 @@ class Graph
     s.Push(node);
 
     var n = Nodes.Count;
-    //o vertice inicial tem o maior numero de Index
+    // O vertice inicial tem o maior numero de Index
     pai.Index = n--;
     node.Index = n--;
 
@@ -233,7 +233,7 @@ class Graph
 
       foreach (var filho in Adj[pai])
       {
-        //verifica se o vertice foi descoberto
+        // Verifica se o vertice foi descoberto
         if (filho.Visitado == false)
         {
           filho.Index = n--;
@@ -251,7 +251,7 @@ class Graph
 
         filho.Visitado = true;
       }
-      //se o novo grafo tem o mesmo numero de vertices do anterior, todos vertices foram descobertos e numerados
+      // Se o novo grafo tem o mesmo numero de vertices do anterior, todos vertices foram descobertos e numerados
       if (grafo.Nodes.Count == Nodes.Count || q.Count == 0)
       {
         return new Tuple<Graph, Stack<Node>>(grafo, s);
@@ -261,7 +261,7 @@ class Graph
 
   public bool TarjanPontes(Node pai, Node filho)
   {
-    //armazena o L e H de um determiando Node (vertice)
+    // Armazena o L e H de um determiando Node (vertice)
     var conexoes = new HashSet<Edge>();
 
     // Remover ciclos para formar uma árvore de árvore enraizada 
@@ -284,12 +284,12 @@ class Graph
         {
           quantFilhos += 1 + no.LowLink;
         }
-        //quando o node não tem filhos, é possivel calcular seu L(node) e H(node) 
+        // Quando o node não tem filhos, é possivel calcular seu L(node) e H(node) 
         if (item.Item1.Adj[node].Count - 1 == 0)
         {
           var max = node.Index;
 
-          //descobre o maior index no entorno deste no (sem considerar o do pai)
+          // Descobre o maior index no entorno deste no (sem considerar o do pai)
           foreach (var noo in Adj[node])
           {
             if (noo.Index != node.Index + 1)
@@ -300,13 +300,13 @@ class Graph
 
           conexoes.Add(new Edge(node, node.Index + 1, max));
         }
-        //descobre o menor index do entorno deste no 
+        // Descobre o menor index do entorno deste no 
         if (no.Index < menorNo.Index)
         {
           menorNo = no;
         }
       }
-      //adiciona a conexoes o L e H dos Nodes necessarios
+      // Adiciona a conexoes o L e H dos Nodes necessarios
       if (menorNo != node)
       {
         conexoes.Add(new Edge(node, Math.Min(node.Index - node.LowLink + 1, menorNo.Index - menorNo.LowLink + 1), Math.Max(node.Index, conexoes.ElementAt(conexoes.Count - 1).h)));
@@ -314,7 +314,7 @@ class Graph
 
       node.LowLink = quantFilhos;
 
-      //se H(Filho) <= Filho.Index e L(Filho) > Filho.Index - ND(Filho) então (Pai,Filho) é uma ponte.
+      // Se H(Filho) <= Filho.Index e L(Filho) > Filho.Index - ND(Filho) então (Pai,Filho) é uma ponte.
       if (node == pai)
       {
         return conexoes.ElementAt(conexoes.Count - 2).l > filho.Index - filho.LowLink && conexoes.ElementAt(conexoes.Count - 2).h <= filho.Index; ;
@@ -324,23 +324,26 @@ class Graph
     }
   }
 
+  // Verifica se a aresta existe
   bool VerificaArestaExiste(Node a, Node b)
   {
     return Adj[a].Contains(b);
   }
 
+  // Verifica se a aresta é par
   bool VerificaArestaPar(Node a, Node b)
   {
     return (Adj[a].Count) % 2 == 0 && (Adj[b].Count) % 2 == 0;
   }
 
-  public bool PrintEulerTour(GraphMethod method)
+  // Método de Fleury
+  public bool PrintEulerTourFleury(GraphMethod method)
   {
-    // Acha o vertice de grau impar
     var impares = new List<Node>();
 
     var u = Nodes.ElementAt(0);
 
+    // Acha os vertices de grau impar
     foreach (var node in Nodes)
     {
       if (Adj[node].Count % 2 == 1)
@@ -354,6 +357,7 @@ class Graph
       }
     }
 
+    // Chama o Método com Naive
     if (method == GraphMethod.naive)
     {
       if (impares.Count != 0)
@@ -365,7 +369,7 @@ class Graph
         PrintEulerUtilNaive(u);
       }
     }
-    else
+    else // Chama o Método com Tarjan
     {
       if (impares.Count != 0)
       {
@@ -380,6 +384,7 @@ class Graph
     return true;
   }
 
+  // Percorre o trajeto/caminho euleriano 
   void PrintEulerUtilNaive(Node newU)
   {
     var us = new Queue<Node>();
@@ -400,9 +405,9 @@ class Graph
           // Se aresta u-v é valida, passa para a proxima
           if (!NaiveHasBridge(next, node))
           {
-            // Console.Write("(" + next.N + "-" + node.N + "), "); // TODO: fix
+            // Console.Write("(" + next.N + "-" + node.N + "), ");
 
-            // Essa aresta é utlizada então é removida agora
+            // Essa aresta é utilizada então é removida agora
             RemoveEdge(next, node);
 
             us.Enqueue(node);
@@ -412,8 +417,10 @@ class Graph
         }
         else
         {
-          // Console.Write("(" + next.N + "-" + node.N + "), "); // TODO: fix
+          // Console.Write("(" + next.N + "-" + node.N + "), "); 
           RemoveEdge(next, node);
+
+          // Esse vertice não tem mais adjacentes, então é excluido
           RemoveNode(next);
 
           us.Enqueue(node);
@@ -443,9 +450,9 @@ class Graph
           // Se aresta u-v é valida, passa para a proxima
           if (!TarjanPontes(next, node))
           {
-            // Console.Write("(" + next.N + "-" + node.N + "), "); // TODO: fix
+            // Console.Write("(" + next.N + "-" + node.N + "), ");
 
-            // Essa aresta é utlizada então é removida agora
+            // Essa aresta é utilizada então é removida agora
             RemoveEdge(next, node);
 
             us.Enqueue(node);
@@ -455,8 +462,10 @@ class Graph
         }
         else
         {
-          // Console.Write("(" + next.N + "-" + node.N + "), "); // TODO: fix
+          // Console.Write("(" + next.N + "-" + node.N + "), ");
           RemoveEdge(next, node);
+
+          // Esse vertice não tem mais adjacentes, então é excluido
           RemoveNode(next);
 
           us.Enqueue(node);
@@ -465,6 +474,7 @@ class Graph
     }
   }
 
+  // Método Naïve
   public bool NaiveHasBridge(Node a, Node b)
   {
     // Caso não seja conexo, lançar exceção.
@@ -482,11 +492,13 @@ class Graph
     return !isConnected;
   }
 
+  // Gerar um numero aleatorio
   static int RandomNumber(int min, int max)
   {
     return random.Next(min, max);
   }
 
+  // Remover uma aresta entre dois vertices
   void RemoveEdge(Node a, Node b)
   {
     Adj[a].Remove(b);
@@ -507,6 +519,7 @@ class Graph
     Adj.Remove(node);
   }
 
+  // Gera o grafo Eureliano
   public static Graph Euleriano(int vertexCount)
   {
     var g = InitVertices(vertexCount);
@@ -532,6 +545,7 @@ class Graph
     return g;
   }
 
+  // Gera o grafo Semi-Eureliano
   public static Graph SemiEuleriano(int vertexCount)
   {
     var g = Euleriano(vertexCount);
@@ -541,6 +555,7 @@ class Graph
     return g;
   }
 
+  // Gera o grafo não-Eureliano
   public static Graph NaoEuleriano(int vertexCount)
   {
     var g = Euleriano(vertexCount);
