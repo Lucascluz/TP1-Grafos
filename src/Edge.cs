@@ -1,14 +1,24 @@
 // Classe que representa uma aresta do grafo.
 class Edge
 {
-  public Node a = default!;
-  public int h = default!;
-  public int l = default!;
+  public Node pai = default!;
+  public int flow = default!;
+  public int C = default!;
+  public Node filho = default!;
 
-  public Edge(Node node, int l, int h)
+  public Edge(Node filho, int flow, int C, Node pai)
   {
-    a = node;
-    this.h = h;
-    this.l = l;
+    this.filho = filho;
+    this.flow = flow;
+    this.C = C;
+    this.pai = pai;
+  }
+
+  public Edge(Node filho, Node pai)
+  {
+    this.filho = filho;
+    this.flow = 0;
+    this.C = 1;
+    this.pai = pai;
   }
 }
