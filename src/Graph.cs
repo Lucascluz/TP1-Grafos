@@ -524,39 +524,42 @@ class Graph
   //   return graph;
   // }
 
-  // // Exporta as arestas do grafo para uma string.
-  // public String Export()
-  // {
-  //   var export = "";
+  // Exporta as arestas do grafo para uma string.
+  public String Export()
+  {
+    var export = "";
 
-  //   foreach (var node in Adj)
-  //   {
-  //     foreach (var neighbour in node.Value)
-  //     {
-  //       export += $"{node.Key.N} {neighbour.N}\n";
-  //     }
-  //   }
+    foreach (var node in Adj)
+    {
+      foreach (var neighbour in node.Value)
+      {
+        if (neighbour.filho.N != node.Key.N)
+        {
+          export += $"{node.Key.N} {neighbour.filho.N}\n";
+        }
+      }
+    }
 
-  //   return export;
-  // }
+    return export;
+  }
 
   // // Importa um grafo a partir de uma string.
-  // public static Graph Import(String input)
-  // {
-  //   var g = new Graph();
+  public static Graph Import(String input)
+  {
+    var g = new Graph();
 
-  //   foreach (var item in input.Split("\n").SkipLast(1))
-  //   {
-  //     var x = item.Split(" ");
+    foreach (var item in input.Split("\n").SkipLast(1))
+    {
+      var x = item.Split(" ");
 
-  //     var a = new Node(int.Parse(x[0]));
-  //     var b = new Node(int.Parse(x[1]));
+      var a = new Node(int.Parse(x[0]));
+      var b = new Node(int.Parse(x[1]));
 
-  //     g.Add(a, b);
-  //   }
+      g.Add(a, b);
+    }
 
-  //   return g;
-  // }
+    return g;
+  }
 
   // // Preenche um grafo a partir de uma certa regra de geração.
   // public static Graph FillGraph(int size, GraphType type)
@@ -1047,16 +1050,19 @@ class Graph
         vertice1++;
       }
     }
-
-    for (int k = 0; k <= ligacao - 1; k++)
+    for (int l = 0; l < quantK - 1; l++)
     {
-      var n1 = g.Nodes.ElementAt((vertexCount * k));
-      var n2 = g.Nodes.ElementAt((vertexCount * (k + 1)));
+      for (int k = 0; k < ligacao; k++)
+      {
+        var n1 = g.Nodes.ElementAt(k + (vertexCount * l));
+        var n2 = g.Nodes.ElementAt(k + (vertexCount * (l + 1)));
 
-      var edg = new Edge(n1, n2);
-      g.Adj[n1].Add(edg);
-      g.Adj[n2].Add(edg);
+        var edg = new Edge(n2, n1);
+        g.Adj[n1].Add(edg);
+        g.Adj[n2].Add(edg);
+      }
     }
+
 
     return g;
   }

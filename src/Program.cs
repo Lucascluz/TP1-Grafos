@@ -149,7 +149,10 @@ static class Program
 
     var g1 = new Graph();
     // g1 = Graph.KConexo(5);
-    g1 = Graph.KConexo(5, 2, 1);
+    // g1 = Graph.KConexo(5, 10000, 1);
+    File.WriteAllText($"assets/kconexo1000", Graph.KConexo(5, 1000, 1).Export());
+
+    var g2 = Graph.Import(File.ReadAllText($"assets/graph-test-50000.txt"));
     // g1 = Graph.Euleriano(10000);
     // g1 = Graph.NaoEuleriano(10000);
     // g.Add(_0, _1);
@@ -167,7 +170,7 @@ static class Program
 
     // g.BreadthFirstSearch(_1, _5);
     // g.MaxCaminhosDisjuntos(_0, _4);
-    g1.BuscaLigação(0, 9);
+    // g1.BuscaLigação(0, 9999);
   }
 
   public static void Main(String[] args)
