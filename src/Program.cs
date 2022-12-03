@@ -114,58 +114,60 @@ static class Program
   {
     var g = new Graph();
 
-    // var _0 = new Node(0);
+    var _0 = new Node(0);
     var _1 = new Node(1);
     var _2 = new Node(2);
     var _3 = new Node(3);
     var _4 = new Node(4);
     var _5 = new Node(5);
+    // var _6 = new Node(6);
 
-    // Grafos para teste.
-
-    // g.Add(_0, _1);
-    // g.Add(_1, _2);
-    // g.Add(_2, _0);
-    // g.Add(_3, _4);
-    // g.Add(_4, _5);
-    // g.Add(_5, _3);
-
-    // Árvore.
-    // g.Add(_0, _1);
-    // g.Add(_0, _4);
-    // g.Add(_1, _2);
-    // g.Add(_1, _3);
-    // g.Add(_2, _3);
-    // g.Add(_4, _5);
-
-    // g.Add(_0, _1);
-    // g.Add(_0, _2);
-    // g.Add(_0, _3);
-    // g.Add(_0, _4);
-    // g.Add(_1, _2);
-    // g.Add(_1, _3);
-    // g.Add(_1, _4);
-    // g.Add(_2, _3);
-    // g.Add(_2, _4);
-    // g.Add(_3, _4);
-
-    g.Add(_1, _2);
+    g.Add(_0, _1);
+    g.Add(_0, _2);
     g.Add(_1, _4);
-    g.Add(_2, _3);
+    g.Add(_1, _3);
     g.Add(_2, _4);
     g.Add(_3, _5);
     g.Add(_4, _5);
 
-    // g.BreadthFirstSearch(_1, _5);
-    g.MaxCaminhosDisjuntos(_4, _1);
     // g.Add(_0, _1);
     // g.Add(_0, _2);
-    // g.Add(_0, _3);
-    // g.Add(_3, _2);
-
-    // g.Add(_0, _4);
-    // g.Add(_0, _5);
+    // g.Add(_1, _4);
+    // g.Add(_1, _3);
+    // g.Add(_2, _4);
+    // g.Add(_3, _5);
     // g.Add(_4, _5);
+
+    // g.BuscaLigação(0, 5);
+    // Grafos para teste.
+    // g.Add(_0, _1);
+    // g.Add(_1, _2);
+    // g.Add(_0, _5);
+    // g.Add(_5, _3);
+    // g.Add(_2, _4);
+    // g.Add(_3, _4);
+
+    var g1 = new Graph();
+    // g1 = Graph.KConexo(5);
+    g1 = Graph.KConexo(5, 2, 1);
+    // g1 = Graph.Euleriano(10000);
+    // g1 = Graph.NaoEuleriano(10000);
+    // g.Add(_0, _1);
+    // g.Add(_1, _2);
+    // g.Add(_1, _3);
+    // g.Add(_2, _3);
+    // g.Add(_2, _4);
+    // g.Add(_3, _4);
+
+    // g.Add(_0, _1);
+    // g.Add(_1, _2);
+    // g.Add(_0, _3);
+    // g.Add(_2, _4);
+    // g.Add(_3, _4);
+
+    // g.BreadthFirstSearch(_1, _5);
+    // g.MaxCaminhosDisjuntos(_0, _4);
+    g1.BuscaLigação(0, 9);
   }
 
   public static void Main(String[] args)

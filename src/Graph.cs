@@ -7,7 +7,7 @@ class Graph
   public HashSet<Node> Nodes { get; set; } = new HashSet<Node>();
 
   // Dictionary que representa a lista de adjacência dos vértices.
-  public Dictionary<Node, HashSet<Edge>> Adj { get; } = new Dictionary<Node, HashSet<Edge>>();
+  public Dictionary<Node, HashSet<Edge>> Adj { get; set; } = new Dictionary<Node, HashSet<Edge>>();
 
   // Adicionar apenas um vértice ao grafo.
   public void Add(Node a)
@@ -34,7 +34,7 @@ class Graph
       Adj.Add(b, new HashSet<Edge>());
     }
 
-    var edge = new Edge(a, b);
+    var edge = new Edge(b, a);
     Adj[a].Add(edge);
     Adj[b].Add(edge);
   }
@@ -112,9 +112,114 @@ class Graph
   //   // Retornar a lista de vértices visitados.
   //   return visitedNodes;
   // }
+  // public bool BreadthFirstSearch(Node s, Node f)
+  // {
+  //   // var grafo = Copy();
+  //   var nodeCount = Nodes.Count;
 
-  public Tuple<int, List<Edge>>? BreadthFirstSearch(Node s, Node f)
+  //   // Marcar todos os vértices como não visitados.
+  //   // var visitedNodeIndices = new Dictionary<int, bool>();
+
+  //   foreach (var item in Nodes)
+  //   {
+  //     item.Index = -1;
+  //     // item.Visitado = false;
+  //   }
+
+  //   // Criar fila.
+  //   var queue = new LinkedList<Node>();
+
+  //   // Marcar e colocar na fila o vértice atual.
+  //   // visitedNodeIndices[s.N] = true;
+  //   s.Index = 0;
+  //   queue.AddLast(s);
+
+  //   while (queue.Any())
+  //   {
+  //     // Retirar o vértice da fila.
+  //     var node = queue.First();
+  //     queue.RemoveFirst();
+
+  //     // Recuperar os vértices adjacentes ao vértice atual.
+  //     foreach (var val in Adj[node])
+  //     {
+
+  //       // var exists = visitedNodeIndices.ContainsKey(val.filho.N);
+  //       // var notVisited = !exists || !visitedNodeIndices[val.filho.N];
+  //       if (val.flow != val.C)
+  //       {
+  //         if (val.filho.Index == -1 || val.filho.Index > node.Index + 1)
+  //         {
+  //           val.filho.Index = node.Index + 1;
+  //           // visitedNodeIndices[val.filho.N] = true;
+  //           queue.AddLast(val.filho);
+  //         }
+  //       }
+  //     }
+  //     if (queue.Contains(f) /* && queue.Count == 1 */)
+  //     {
+  //       break;
+  //     }
+  //   }
+
+  //   // queue.AddLast(f);
+  //   if (queue.Count == 0)
+  //     return false;
+
+  //   queue.Clear();
+  //   queue.AddLast(f);
+  //   var visitedEdges = new List<Edge>();
+
+  //   int i = f.Index;
+
+  //   while (queue.Any() /* && !queue.Contains(f) */)
+  //   {
+  //     // Retirar o vértice da fila.
+  //     var node = queue.First();
+  //     queue.RemoveFirst();
+
+  //     // Recuperar os vértices adjacentes ao vértice atual.
+  //     foreach (var val in Adj[node])
+  //     {
+  //       if (val.pai.Index == i - 1 && val.flow != val.C)
+  //       {
+  //         // var exists = visitedNodeIndices.ContainsKey(val.filho.N);
+  //         // var notVisited = !exists || !visitedNodeIndices[val.filho.N];
+  //         i--;
+  //         visitedEdges.Add(val);
+  //         queue.AddLast(val.pai);
+  //         // node = queue.First();
+  //         break;
+  //       }
+
+  //       // }
+  //     }
+
+  //     if (queue.Contains(s))
+  //     {
+  //       var gargalo = visitedEdges[0].C;
+  //       foreach (var item in visitedEdges)
+  //       {
+  //         gargalo = Math.Min(item.C - item.flow, gargalo);
+  //       }
+
+  //       queue.Clear();
+  //       PreencheArestas(gargalo, visitedEdges);
+  //       visitedEdges = new List<Edge>();
+  //       queue.AddLast(f);
+  //       i = f.Index;
+  //     }
+
+
+  //   }
+
+  //   // Retornar a lista de vértices visitados.
+  //   return true;
+  // }
+
+  public bool BreadthFirstSearch(Node s, Node f)
   {
+    // var grafo = Copy();
     var nodeCount = Nodes.Count;
 
     // Marcar todos os vértices como não visitados.
@@ -134,10 +239,7 @@ class Graph
     s.Index = 0;
     queue.AddLast(s);
 
-    // Criar uma lista com apenas os vértices visitados.
-    int gargalo = 0;
-
-    while (!queue.Contains(f) && queue.Any())
+    while (queue.Any())
     {
       // Retirar o vértice da fila.
       var node = queue.First();
@@ -147,108 +249,270 @@ class Graph
       foreach (var val in Adj[node])
       {
         // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
-        if (val.flow != val.C)
+        if (/* val.flow != val.C */val.flow == 1)
         {
           // var exists = visitedNodeIndices.ContainsKey(val.pai.N);
           // var notVisited = !exists || !visitedNodeIndices[val.pai.N];
 
-          if (val.pai.Index == -1)
+          if ((val.pai.Index == -1 || val.pai.Index > node.Index + 1) && val.pai != node)
           {
             val.pai.Index = node.Index + 1;
             // visitedNodeIndices[val.pai.N] = true;
             queue.AddLast(val.pai);
           }
         }
-        else if (val.C - val.flow > 0)
+        else /* if (val.C - val.flow > 0) */
         {
           // var exists = visitedNodeIndices.ContainsKey(val.filho.N);
           // var notVisited = !exists || !visitedNodeIndices[val.filho.N];
 
-          if (val.filho.Index == -1)
+          if (val.filho.Index == -1 || val.filho.Index > node.Index + 1)
           {
-            val.pai.Index = node.Index + 1;
+            val.filho.Index = node.Index + 1;
             // visitedNodeIndices[val.filho.N] = true;
             queue.AddLast(val.filho);
           }
         }
-        if (queue.Contains(f))
-        {
-          gargalo = val.C - val.flow;
-          break;
-        }
+      }
+      if (queue.Contains(f) /* && queue.Count == 1 */)
+      {
+        break;
       }
     }
 
     // queue.AddLast(f);
     if (queue.Count == 0)
-      return null;
+      return false;
 
-    var visitedNodes = new List<Edge>();
-
-    queue.RemoveFirst();
-    int i = f.Index;
-
-    while (!queue.Contains(s))
+    var aresta = 0;
+    foreach (var item in Adj[f])
     {
-      // Retirar o vértice da fila.
-      var node = queue.First();
-      queue.RemoveFirst();
+      if (item.pai.Index == f.Index - 1)
+        aresta++;
+    }
 
-      // Recuperar os vértices adjacentes ao vértice atual.
-      foreach (var val in Adj[node])
+    while (aresta != 0)
+    {
+      var visitedEdges = new List<Edge>();
+      queue.Clear();
+      queue.AddLast(f);
+      int i = f.Index;
+
+      while (queue.Any() && !queue.Contains(s))
       {
-        // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
-        if (val.pai.Index == i - 1)
+        // Retirar o vértice da fila.
+        var node = queue.First();
+        queue.RemoveFirst();
+
+        // Recuperar os vértices adjacentes ao vértice atual.
+        foreach (var val in Adj[node])
         {
-          // var exists = visitedNodeIndices.ContainsKey(val.pai.N);
-          // var notVisited = !exists || !visitedNodeIndices[val.pai.N];
-          gargalo = Math.Min(val.C - val.flow, gargalo);
-          i--;
-          visitedNodes.Add(val);
-          queue.AddLast(val.pai);
-          node = queue.First();
+          // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
+          // if (val.C != val.flow)
+          // {
+          if (val.pai.Index == i - 1 && val.flow == 0 && val.pai.Visitado == false)
+          {
+            // var exists = visitedNodeIndices.ContainsKey(val.pai.N);
+            // var notVisited = !exists || !visitedNodeIndices[val.pai.N];
+            val.pai.Visitado = true;
+            i--;
+            visitedEdges.Add(val);
+            queue.AddLast(val.pai);
+            node = queue.First();
+          }
+          else if (val.filho.Index == i - 1 && val.flow == 1 && val.filho.Visitado == false)
+          {
+
+            // var exists = visitedNodeIndices.ContainsKey(val.filho.N);
+            // var notVisited = !exists || !visitedNodeIndices[val.filho.N];
+            val.filho.Visitado = true;
+            i--;
+            visitedEdges.Add(val);
+            queue.AddLast(val.filho);
+            node = queue.First();
+          }
+          if (queue.Contains(s))
+          {
+            s.Visitado = false;
+            queue.Clear();
+            PreencheArestas(visitedEdges);
+            visitedEdges = new List<Edge>();
+            queue.AddLast(f);
+            i = f.Index;
+            aresta--;
+            break;
+          }
+          // }
         }
-        else if (val.filho.Index == i - 1)
-        {
-          // var exists = visitedNodeIndices.ContainsKey(val.filho.N);
-          // var notVisited = !exists || !visitedNodeIndices[val.filho.N];
-          i--;
-          visitedNodes.Add(val);
-          queue.AddLast(val.filho);
-          node = queue.First();
-        }
+
 
       }
     }
 
     // Retornar a lista de vértices visitados.
-    return new Tuple<int, List<Edge>>(gargalo, visitedNodes);
+    return true;
   }
 
-  // Cria uma cópia do grafo.
-  // public Graph Copy()
+  void PreencheArestas(List<Edge> visitedNodes)
+  {
+    foreach (var item in visitedNodes)
+    {
+      if (item.flow == 0)
+        item.flow = 1;
+      else
+        item.flow = 0;
+    }
+  }
+
+  // public Tuple<int, List<Edge>>? BreadthFirstSearch(Node s, Node f)
   // {
-  //   var graph = new Graph();
+  //   var grafo = Copy();
+  //   var nodeCount = Nodes.Count;
 
-  //   // Processar a lista de adjacência.
-  //   foreach (var entry in Adj)
+  //   // Marcar todos os vértices como não visitados.
+  //   // var visitedNodeIndices = new Dictionary<int, bool>();
+
+  //   foreach (var item in grafo.Nodes)
   //   {
-  //     var a = entry.Key;
+  //     item.Index = -1;
+  //     // item.Visitado = false;
+  //   }
 
-  //     foreach (var b in entry.Value)
+  //   // Criar fila.
+  //   var queue = new LinkedList<Node>();
+
+  //   // Marcar e colocar na fila o vértice atual.
+  //   // visitedNodeIndices[s.N] = true;
+  //   s.Index = 0;
+  //   queue.AddLast(grafo.Nodes.ElementAt(s.N));
+
+  //   // Criar uma lista com apenas os vértices visitados.
+  //   int gargalo = 0;
+
+  //   while (!queue.Contains(f) && queue.Any())
+  //   {
+  //     // Retirar o vértice da fila.
+  //     var node = queue.First();
+  //     queue.RemoveFirst();
+
+  //     // Recuperar os vértices adjacentes ao vértice atual.
+  //     foreach (var val in grafo.Adj[node])
   //     {
-  //       graph.Add(a, b);
+  //       // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
+  //       if (val.flow != val.C)
+  //       {
+  //         // var exists = visitedNodeIndices.ContainsKey(val.pai.N);
+  //         // var notVisited = !exists || !visitedNodeIndices[val.pai.N];
+
+  //         if (val.pai.Index == -1 || val.pai.Index > node.Index + 1)
+  //         {
+  //           val.pai.Index = node.Index + 1;
+  //           // visitedNodeIndices[val.pai.N] = true;
+  //           queue.AddLast(val.pai);
+  //         }
+  //       }
+  //       else if (val.C - val.flow > 0)
+  //       {
+  //         // var exists = visitedNodeIndices.ContainsKey(val.filho.N);
+  //         // var notVisited = !exists || !visitedNodeIndices[val.filho.N];
+
+  //         if (val.filho.Index == -1 || val.pai.Index > node.Index + 1)
+  //         {
+  //           val.pai.Index = node.Index + 1;
+  //           // visitedNodeIndices[val.filho.N] = true;
+  //           queue.AddLast(val.filho);
+  //         }
+  //       }
+  //       if (queue.Contains(f))
+  //       {
+  //         gargalo = val.C - val.flow;
+  //         break;
+  //       }
   //     }
   //   }
 
-  //   // Processr a lista de vértices.
-  //   foreach (var node in Nodes)
+  //   // queue.AddLast(f);
+  //   if (queue.Count == 0)
+  //     return null;
+
+  //   var visitedNodes = new List<Edge>();
+
+  //   queue.RemoveFirst();
+  //   int i = grafo.Nodes.ElementAt(f.N).Index;
+
+  //   while (!queue.Contains(s))
   //   {
-  //     graph.Add(node);
+  //     // Retirar o vértice da fila.
+  //     var node = queue.First();
+  //     queue.RemoveFirst();
+
+  //     // Recuperar os vértices adjacentes ao vértice atual.
+  //     foreach (var val in grafo.Adj[node])
+  //     {
+  //       // Caso o vértice não tenha sido visitado, marcá-lo e colocá-lo na fila.
+  //       if (val.pai.Index == i - 1)
+  //       {
+  //         // var exists = visitedNodeIndices.ContainsKey(val.pai.N);
+  //         // var notVisited = !exists || !visitedNodeIndices[val.pai.N];
+  //         gargalo = Math.Min(val.C - val.flow, gargalo);
+  //         i--;
+  //         visitedNodes.Add(val);
+  //         queue.AddLast(val.pai);
+  //         node = queue.First();
+  //       }
+  //       else if (val.filho.Index == i - 1)
+  //       {
+  //         // var exists = visitedNodeIndices.ContainsKey(val.filho.N);
+  //         // var notVisited = !exists || !visitedNodeIndices[val.filho.N];
+  //         i--;
+  //         visitedNodes.Add(val);
+  //         queue.AddLast(val.filho);
+  //         node = queue.First();
+  //       }
+
+  //     }
   //   }
 
-  //   return graph;
+  //   // Retornar a lista de vértices visitados.
+  //   return new Tuple<int, List<Edge>>(gargalo, visitedNodes);
   // }
+  // Cria uma cópia do grafo.
+  public Graph Copy()
+  {
+    var graph = new Graph();
+
+    // graph.Nodes = this.Nodes;
+    // graph.Adj = this.Adj;
+    // Processar a lista de adjacência.
+    var conexoes = new HashSet<Edge>();
+    foreach (var node in Nodes)
+    {
+      graph.Add(new Node(node.N));
+
+      foreach (var entry in Adj[node])
+      {
+        conexoes.Add(entry);
+        // var a = entry.Key;
+
+        // foreach (var b in entry.Value)
+        // {
+        //   graph.Add(a, b);
+        // }
+      }
+    }
+
+
+    foreach (var entry in conexoes)
+    {
+      var edge = new Edge(graph.Nodes.ElementAt(entry.filho.N), graph.Nodes.ElementAt(entry.pai.N));
+      graph.Adj[graph.Nodes.ElementAt(entry.pai.N)].Add(edge);
+      graph.Adj[graph.Nodes.ElementAt(entry.filho.N)].Add(edge);
+    }
+    // // Processr a lista de vértices.
+
+
+    return graph;
+  }
 
   // // Copia o graFo sem uma determianda aresta.
   // public Graph CopyWithoutEdge(Node a, Node b)
@@ -310,18 +574,18 @@ class Graph
   //   }
   // }
 
-  // // Inicializa os vértices de um grafo.
-  // public static Graph InitVertices(int vertexCount)
-  // {
-  //   var grafo = new Graph();
+  // Inicializa os vértices de um grafo.
+  public static Graph InitVertices(int vertexCount)
+  {
+    var grafo = new Graph();
 
-  //   for (int i = 0; i < vertexCount; i++)
-  //   {
-  //     grafo.Add(new Node(i));
-  //   }
+    for (int i = 0; i < vertexCount; i++)
+    {
+      grafo.Add(new Node(i));
+    }
 
-  //   return grafo;
-  // }
+    return grafo;
+  }
 
   // // Realiza uma busca em largura a partir de algum vértice para definir se o grafo é conexo.
   // public bool IsConnected()
@@ -465,17 +729,25 @@ class Graph
   //   }
   // }
 
-  // // Verifica se a aresta existe.
-  // bool VerificaArestaExiste(Node a, Node b)
-  // {
-  //   return Adj[a].Contains(b);
-  // }
+  // Verifica se a aresta existe.
+  bool VerificaArestaExiste(Node a, Node b)
+  {
+    foreach (var item in Adj[a])
+    {
+      if (item.filho == b)
+      {
+        return true;
+      }
+    }
+    return false;
+    // return Adj[a].Contains(b);
+  }
 
-  // // Verifica se a aresta é par.
-  // bool VerificaArestaPar(Node a, Node b)
-  // {
-  //   return (Adj[a].Count) % 2 == 0 && (Adj[b].Count) % 2 == 0;
-  // }
+  // Verifica se a aresta é par.
+  bool VerificaArestaPar(Node a, Node b)
+  {
+    return (Adj[a].Count) % 2 == 0 && (Adj[b].Count) % 2 == 0;
+  }
 
   // // Executa o Método de Fleury.
   // public bool PrintEulerTourFleury(GraphMethod method)
@@ -633,11 +905,11 @@ class Graph
   //   return !isConnected;
   // }
 
-  // // Gerar um número aleatório entre o mínimo e o máximo.
-  // static int RandomNumber(int min, int max)
-  // {
-  //   return random.Next(min, max);
-  // }
+  // Gerar um número aleatório entre o mínimo e o máximo.
+  static int RandomNumber(int min, int max)
+  {
+    return random.Next(min, max);
+  }
 
   // // Remover uma aresta entre dois vértices.
   // void RemoveEdge(Node a, Node b)
@@ -660,75 +932,142 @@ class Graph
   //   Adj.Remove(node);
   // }
 
-  // // Gerar um grafo Euleriano.
-  // public static Graph Euleriano(int vertexCount)
-  // {
-  //   var g = InitVertices(vertexCount);
+  // Gerar um grafo Euleriano.
+  public static Graph Euleriano(int vertexCount)
+  {
+    var g = InitVertices(vertexCount);
 
-  //   vertexCount--;
+    vertexCount--;
 
-  //   int vertice1 = 0;
-  //   var a = g.Nodes.ElementAt(0);
-  //   var b = g.Nodes.ElementAt(vertexCount);
+    int vertice1 = 0;
+    var a = g.Nodes.ElementAt(0);
+    var b = g.Nodes.ElementAt(vertexCount);
 
-  //   g.Add(a, b);
+    g.Add(a, b);
 
-  //   while (vertice1 < vertexCount)
-  //   {
-  //     a = g.Nodes.ElementAt(vertice1);
-  //     b = g.Nodes.ElementAt(vertice1 + 1);
+    while (vertice1 < vertexCount)
+    {
+      a = g.Nodes.ElementAt(vertice1);
+      b = g.Nodes.ElementAt(vertice1 + 1);
 
-  //     g.Add(a, b);
+      g.Add(a, b);
 
-  //     vertice1++;
-  //   }
+      vertice1++;
+    }
 
-  //   return g;
-  // }
+    return g;
+  }
 
-  // // Gerar um grafo Semi-euleriano.
-  // public static Graph SemiEuleriano(int vertexCount)
-  // {
-  //   var g = Euleriano(vertexCount);
+  // Gerar um grafo Semi-euleriano.
+  public static Graph SemiEuleriano(int vertexCount)
+  {
+    var g = Euleriano(vertexCount);
 
-  //   g.Add(g.Nodes.ElementAt(0), g.Nodes.ElementAt(vertexCount / 2 + 1));
+    g.Add(g.Nodes.ElementAt(0), g.Nodes.ElementAt(vertexCount / 2 + 1));
 
-  //   return g;
-  // }
+    return g;
+  }
 
-  // // Gerar um grafo Não-euleriano.
-  // public static Graph NaoEuleriano(int vertexCount)
-  // {
-  //   var g = Euleriano(vertexCount);
+  // Gerar um grafo Não-euleriano.
+  public static Graph NaoEuleriano(int vertexCount)
+  {
+    var g = Euleriano(vertexCount);
 
-  //   for (int i = 0; i < 2;)
-  //   {
-  //     var vertice1 = RandomNumber(0, vertexCount);
-  //     var vertice2 = RandomNumber(0, vertexCount);
+    for (int i = 0; i < 2;)
+    {
+      var vertice1 = RandomNumber(0, vertexCount);
+      var vertice2 = RandomNumber(0, vertexCount);
 
-  //     if (vertice1 != vertice2 && !g.VerificaArestaExiste(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2)) && g.VerificaArestaPar(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2)))
-  //     {
-  //       g.Add(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2));
-  //       i++;
-  //     }
-  //   }
+      if (vertice1 != vertice2 && !g.VerificaArestaExiste(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2)) && g.VerificaArestaPar(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2)))
+      {
+        g.Add(g.Nodes.ElementAt(vertice1), g.Nodes.ElementAt(vertice2));
+        i++;
+      }
+    }
 
-  //   return g;
-  // }
+    return g;
+  }
+
+
+  public static Graph KConexo(int vertexCount)
+  {
+    var g = InitVertices(vertexCount);
+
+    int vertice1 = 0;
+    // var a = g.Nodes.ElementAt(0);
+    // var b = g.Nodes.ElementAt(vertexCount);
+
+    // g.Add(a, b);
+
+    while (vertice1 < vertexCount)
+    {
+      for (int i = 0; i < vertexCount; i++)
+      {
+        if (i != vertice1)
+        {
+          var a = g.Nodes.ElementAt(vertice1);
+          var b = g.Nodes.ElementAt(i);
+          var edge = new Edge(b, a);
+          g.Adj[a].Add(edge);
+          g.Adj[b].Add(edge);
+        }
+      }
+      vertice1++;
+    }
+
+    return g;
+  }
+
+  public static Graph KConexo(int vertexCount, int quantK, int ligacao)
+  {
+    var g = InitVertices(vertexCount * quantK);
+
+    int vertice1 = 0;
+    // var a = g.Nodes.ElementAt(0);
+    // var b = g.Nodes.ElementAt(vertexCount);
+
+    // g.Add(a, b);
+    int i = 0;
+
+    for (int j = 0; j < quantK; j++)
+    {
+      while (vertice1 < vertexCount + (vertexCount * j))
+      {
+        for (i = 0 + (vertexCount * j); i < vertexCount + (vertexCount * j); i++)
+        {
+          if (i != vertice1)
+          {
+            var a = g.Nodes.ElementAt(vertice1);
+            var b = g.Nodes.ElementAt(i);
+            var edge = new Edge(b, a);
+            g.Adj[a].Add(edge);
+            g.Adj[b].Add(edge);
+          }
+        }
+        vertice1++;
+      }
+    }
+
+    for (int k = 0; k <= ligacao - 1; k++)
+    {
+      var n1 = g.Nodes.ElementAt((vertexCount * k));
+      var n2 = g.Nodes.ElementAt((vertexCount * (k + 1)));
+
+      var edg = new Edge(n1, n2);
+      g.Adj[n1].Add(edg);
+      g.Adj[n2].Add(edg);
+    }
+
+    return g;
+  }
 
   public List<List<Edge>> MaxCaminhosDisjuntos(Node s, Node f)
   {
     while (true)
     {
       var m = BreadthFirstSearch(s, f);
-      if (m == null)
+      if (m == false)
         break;
-
-      foreach (var item in m.Item2)
-      {
-        item.flow += m.Item1;
-      }
-
     }
 
     var queue = new LinkedList<Node>();
@@ -749,15 +1088,16 @@ class Graph
         {
           caminhos[i].Add(item);
           item.flow = 0;
-          if (item.pai == f)
+          if (item.filho == f)
           {
+            queue.Clear();
             queue.AddFirst(s);
             i++;
             caminhos.Add(new List<Edge>());
           }
           else
           {
-            queue.AddFirst(item.pai);
+            queue.AddFirst(item.filho);
           }
           break;
         }
@@ -768,6 +1108,10 @@ class Graph
     return caminhos;
   }
 
+  public List<List<Edge>> BuscaLigação(int s, int f)
+  {
+    return MaxCaminhosDisjuntos(Nodes.ElementAt(s), Nodes.ElementAt(f));
+  }
 
 
 }

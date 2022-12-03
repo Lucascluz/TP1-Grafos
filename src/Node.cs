@@ -10,7 +10,7 @@ class Node
   {
     N = n;
     Index = -1;
-    LowLink = 0;
+    // LowLink = 0;
     Visitado = false;
   }
 
