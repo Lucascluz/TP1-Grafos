@@ -284,14 +284,14 @@ class Graph
     if (queue.Count == 0)
       return false;
 
-    var aresta = 0;
+    var arestaMenorNivel = 0;
     foreach (var item in Adj[f])
     {
-      if (item.pai.Index == f.Index - 1)
-        aresta++;
+      if (item.pai.Index == f.Index - 1 && item.flow == 0)
+        arestaMenorNivel++;
     }
 
-    while (aresta != 0)
+    while (arestaMenorNivel > 0)
     {
       var visitedEdges = new List<Edge>();
       queue.Clear();
@@ -318,7 +318,8 @@ class Graph
             i--;
             visitedEdges.Add(val);
             queue.AddLast(val.pai);
-            node = queue.First();
+            // node = queue.First();
+            break;
           }
           else if (val.filho.Index == i - 1 && val.flow == 1 && val.filho.Visitado == false)
           {
@@ -329,24 +330,25 @@ class Graph
             i--;
             visitedEdges.Add(val);
             queue.AddLast(val.filho);
-            node = queue.First();
-          }
-          if (queue.Contains(s))
-          {
-            s.Visitado = false;
-            queue.Clear();
-            PreencheArestas(visitedEdges);
-            visitedEdges = new List<Edge>();
-            queue.AddLast(f);
-            i = f.Index;
-            aresta--;
+            // node = queue.First();
             break;
           }
+
           // }
         }
-
+        if (queue.Contains(s))
+        {
+          s.Visitado = false;
+          queue.Clear();
+          PreencheArestas(visitedEdges);
+          visitedEdges = new List<Edge>();
+          queue.AddLast(f);
+          i = f.Index;
+          arestaMenorNivel--;
+        }
 
       }
+      arestaMenorNivel--;
     }
 
     // Retornar a lista de vértices visitados.
@@ -946,7 +948,7 @@ class Graph
     var a = g.Nodes.ElementAt(0);
     var b = g.Nodes.ElementAt(vertexCount);
 
-    g.Add(a, b);
+    g.Add(b, a);
 
     while (vertice1 < vertexCount)
     {
@@ -1067,6 +1069,50 @@ class Graph
     return g;
   }
 
+  public static Graph DirecaoGrafo(int vertexCount, int linhaQuant)
+  {
+    var quantVerticesMeio = vertexCount * linhaQuant;
+    var g = InitVertices(quantVerticesMeio + 2);
+    var nInicial = g.Nodes.ElementAt(0);
+    for (int i = 1; i <= linhaQuant; i++)
+    {
+      var n2 = g.Nodes.ElementAt(i);
+
+      var edg = new Edge(n2, nInicial);
+      g.Adj[nInicial].Add(edg);
+      g.Adj[n2].Add(edg);
+    }
+
+    for (int i = 1; i <= quantVerticesMeio - linhaQuant; i++)
+    {
+      var n1 = g.Nodes.ElementAt(i);
+
+      var n2 = g.Nodes.ElementAt(i + linhaQuant);
+
+
+      var edge = new Edge(n2, n1);
+      g.Adj[n1].Add(edge);
+      g.Adj[n2].Add(edge);
+      if (i % 3 != 0)
+      {
+        var n3 = g.Nodes.ElementAt(i + linhaQuant + 1);
+        var e = new Edge(n3, n1);
+        g.Adj[n3].Add(e);
+        g.Adj[n1].Add(e);
+      }
+    }
+
+    var nFinal = g.Nodes.ElementAt(quantVerticesMeio + 1);
+    for (int i = 0; i < linhaQuant; i++)
+    {
+      var n = g.Nodes.ElementAt(quantVerticesMeio - i);
+      var edg = new Edge(nFinal, n);
+      g.Adj[n].Add(edg);
+      g.Adj[nFinal].Add(edg);
+    }
+    return g;
+  }
+
   public List<List<Edge>> MaxCaminhosDisjuntos(Node s, Node f)
   {
     while (true)
@@ -1119,5 +1165,9 @@ class Graph
     return MaxCaminhosDisjuntos(Nodes.ElementAt(s), Nodes.ElementAt(f));
   }
 
+  public List<List<Edge>> BuscaLigação()
+  {
+    return MaxCaminhosDisjuntos(Nodes.ElementAt(0), Nodes.ElementAt(Nodes.Count - 1));
+  }
 
 }
