@@ -293,7 +293,7 @@ class Graph
   }
 
   // Gerar um grafo Euleriano.
-  public static Graph Euleriano(int vertexCount)
+  public static Graph Circular(int vertexCount)
   {
     var g = InitVertices(vertexCount);
 
@@ -321,7 +321,7 @@ class Graph
   // Gerar um grafo Semi-euleriano.
   public static Graph SemiEuleriano(int vertexCount)
   {
-    var g = Euleriano(vertexCount);
+    var g = Circular(vertexCount);
 
     g.Add(g.Nodes.ElementAt(0), g.Nodes.ElementAt(vertexCount / 2 + 1));
 
@@ -331,7 +331,7 @@ class Graph
   // Gerar um grafo Não-euleriano.
   public static Graph NaoEuleriano(int vertexCount)
   {
-    var g = Euleriano(vertexCount);
+    var g = Circular(vertexCount);
 
     for (int i = 0; i < 2;)
     {
@@ -420,7 +420,7 @@ class Graph
     return g;
   }
 
-  public static Graph DirecaoGrafo(int vertexCount, int linhaQuant)
+  public static Graph Direcionado(int vertexCount, int linhaQuant)
   {
     var quantVerticesMeio = vertexCount * linhaQuant;
     var g = InitVertices(quantVerticesMeio + 2);
