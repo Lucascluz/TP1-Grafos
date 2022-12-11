@@ -15,16 +15,19 @@ static class Program
 
     foreach (var test in tests)
     {
+      var g0 = KConexo(test);
       stopwatch.Restart();
-      KConexo(test).BuscaLigação();
+      g0.BuscaLigação();
       Print("K-conexo", test, stopwatch);
 
+      var g1 = Direcionado(test);
       stopwatch.Restart();
-      Direcionado(test).BuscaLigação();
+      g1.BuscaLigação();
       Print("Direcionado", test, stopwatch);
 
+      var g2 = Circular(test);
       stopwatch.Restart();
-      Circular(test).BuscaLigação();
+      g2.BuscaLigação();
       Print("Circular", test, stopwatch);
     }
   }
